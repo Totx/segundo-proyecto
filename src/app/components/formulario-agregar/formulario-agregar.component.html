@@ -1,19 +1,34 @@
-<p>formulario-agregar works!</p>
+<h3 class="alert alert-info">Formulario agregar</h3>
 
-<form [formGroup]="contactoForm">
+<form [formGroup]="contactoForm" class="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="id">ID</label>
-      <input type="number" id="id" class="form-control" formControlName="id">
+      <input type="number" id="id" class="form-control" [formControlName]="campos.id">
       <div *ngIf="contactoForm.get('id')?.invalid && contactoForm.get('id')?.touched" class="text-danger">
         ID es requerido y debe ser un número.
       </div>
     </div>
-  
+
     <div class="form-group">
+      <label for="documento">Documento</label>
+      <input type="text" id="documento" class="form-control" [formControlName]="campos.documento">
+      <div *ngIf="contactoForm.get('documento')?.invalid && contactoForm.get('documento')?.touched" class="text-danger">
+        Documento es requerido.
+      </div>
+    </div>
+  <div class="form-group">
       <label for="nombre">Nombre</label>
       <input type="text" id="nombre" class="form-control" formControlName="nombre">
       <div *ngIf="contactoForm.get('nombre')?.invalid && contactoForm.get('nombre')?.touched" class="text-danger">
-        Nombre es requerido.
+        <div *ngIf="contactoForm.get('nombre')?.hasError('required')">
+          El campo nombre es requerido
+        </div>
+        <div *ngIf="contactoForm.get('nombre')?.hasError('minlength')">
+          El campo debe tener al menos 3 caracteres
+        </div>
+        <div *ngIf="contactoForm.get('nombre')?.hasError('maxlength')">
+          El campo no puede tener más de 50 caracteres
+        </div>
       </div>
     </div>
   
@@ -25,17 +40,23 @@
       </div>
     </div>
 
-    <!--
+    
     <div class="form-group">
       <label for="genero">Género</label>
       <select id="genero" class="form-control" formControlName="genero">
         <option [value]="null" disabled>Seleccione género</option>
         <option *ngFor="let gen of generos" [value]="gen">{{ gen }}</option>
       </select>
-      <div *ngIf="contactoForm.get('genero').invalid && contactoForm.get('genero').touched" class="text-danger">
+      <div *ngIf="contactoForm.get('genero')?.invalid && contactoForm.get('genero')?.touched" class="text-danger">
         Género es requerido.
       </div>
-    </div>-->
+    </div>
+
+    <div class="alert alert-success">
+      <b>Debug</b>
+      <pre>{{ contactoForm.value | json }}</pre>
+      <pre>{{ contactoForm.get("nombre")?.errors | json }}</pre>
+    </div>
   
     <button type="submit" class="btn btn-primary" [disabled]="contactoForm.invalid">Agregar Contacto</button>
   </form>
