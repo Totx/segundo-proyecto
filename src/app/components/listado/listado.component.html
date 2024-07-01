@@ -20,7 +20,7 @@
           <a routerLink="editar/{{ contact.id }}" class="btn btn-primary me-2">
             Editar
           </a>
-          <button class="btn btn-danger">Eliminar</button>
+          <button class="btn btn-danger" (click)="deleteContact(contact)">Eliminar</button>
         </td>
       </tr>
     </tbody>

@@ -11,7 +11,7 @@ import { ContactoModel } from '../../models/contacto.model';
 import { GeneroModel } from '../../models/genero.model';
 import { PropNames, objectProps } from '../../utils/strong-type-props';
 import Swal from 'sweetalert2';
-import { ContactoService } from '../../services/contacto.service';
+import { ContactoServiceInterface } from '../../services/contacto.service.interface';
 
 @Component({
   selector: 'app-formulario-agregar',
@@ -30,7 +30,7 @@ export class FormularioAgregarComponent {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private contactoService: ContactoService
+    private contactoService: ContactoServiceInterface
   ) {
     this.contactoForm = this.fb.group({
       documento: [
@@ -41,8 +41,8 @@ export class FormularioAgregarComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(10),
+          Validators.minLength(3),
+          Validators.maxLength(50),
         ],
       ],
       fechaNacimiento: ['', [Validators.required]],

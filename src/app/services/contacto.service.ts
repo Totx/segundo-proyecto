@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { ContactoModel } from '../models/contacto.model';
 import { GeneroModel } from '../models/genero.model';
 import { Observable, of } from 'rxjs';
+import { ContactoServiceInterface } from './contacto.service.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContactoService {
-
+export class ContactoService extends ContactoServiceInterface {
   private contacts: ContactoModel[] = [
     {
       id: 1,
@@ -39,26 +39,37 @@ export class ContactoService {
     },
   ];
 
-  constructor() {}
+  constructor() {
+    super();
+  }
 
-  getContactos(): Observable<ContactoModel[]> {
+  override getContactos(): Observable<ContactoModel[]> {
     return of(this.contacts);
   }
 
-  addContacto(contacto: ContactoModel): Observable<any> {
+  override addContacto(contacto: ContactoModel): Observable<any> {
     contacto.id = Math.max(...this.contacts.map((contacto) => contacto.id)) + 1;
     this.contacts.push(contacto);
-    return of("Contacto Agregado");
+    return of('Contacto Agregado');
   }
 
-  deleteContacto(contacto: ContactoModel): Observable<any> {
+  override deleteContacto(id: number): Observable<any> {
     // This method filters the contacts array to remove the contact object passed as a parameter
     // It creates a new array with all contacts except the one being deleted
     // Then it returns an observable with the string "Contacto Eliminado"
     this.contacts = this.contacts.filter(
-      (contactoVal) => contacto.id !== contactoVal.id
+      (contactoVal) => id !== contactoVal.id
     );
     return of('Contacto Eliminado');
   }
-
+  override updateContacto(
+    id: number,
+    contacto: ContactoModel
+  ): Observable<any> {
+    const index = this.contacts.findIndex((c) => c.id === id);
+    if (index !== -1) {
+      this.contacts[index] = contacto;
+    }
+    return of(contacto);
+  }
 }
